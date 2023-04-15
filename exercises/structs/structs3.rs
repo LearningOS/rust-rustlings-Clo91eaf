@@ -3,8 +3,7 @@
 // defined the Package struct and we want to test some logic attached to it.
 // Make the code compile and the tests pass!
 // Execute `rustlings hint structs3` or use the `hint` watch subcommand for a hint.
-
-// I AM NOT DONE
+ 
 
 #[derive(Debug)]
 struct Package {
@@ -26,12 +25,18 @@ impl Package {
         }
     }
 
-    fn is_international(&self) -> ??? {
+    fn is_international(&self) -> bool {
         // Something goes here...
+        if self.recipient_country == self.sender_country {
+            false
+        } else {
+            true 
+        }
     }
 
-    fn get_fees(&self, cents_per_gram: i32) -> ??? {
+    fn get_fees(&self, cents_per_gram: i32) -> i32 {
         // Something goes here...
+        self.weight_in_grams * cents_per_gram
     }
 }
 

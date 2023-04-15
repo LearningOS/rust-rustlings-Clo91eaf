@@ -28,7 +28,6 @@ enum ParsePersonError {
     ParseInt(ParseIntError),
 }
 
-// I AM NOT DONE
 
 // Steps:
 // 1. If the length of the provided string is 0, an error should be returned
@@ -46,6 +45,31 @@ enum ParsePersonError {
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s.len() == 0 {
+            return Err(ParsePersonError::Empty)
+        }
+
+        let v: Vec<&str> = s.split(',').collect();
+
+        if v.len() != 2 {
+            return Err(ParsePersonError::BadLen)
+        }
+
+        let name = String::from(v[0]);
+
+        if name.is_empty() {
+            return Err(ParsePersonError::NoName)
+        }
+
+        let age = match v[1].parse::<usize>() {
+            Ok(age)  => age,
+            Err(e) => return Err(ParsePersonError::ParseInt(e)),
+        };
+
+        Ok(Person {
+            name,
+            age
+        })
     }
 }
 
@@ -58,6 +82,7 @@ fn main() {
 mod tests {
     use super::*;
 
+    //DONE
     #[test]
     fn empty_input() {
         assert_eq!("".parse::<Person>(), Err(ParsePersonError::Empty));
@@ -86,6 +111,7 @@ mod tests {
         ));
     }
 
+    //DONE
     #[test]
     fn missing_comma_and_age() {
         assert_eq!("John".parse::<Person>(), Err(ParsePersonError::BadLen));
@@ -112,11 +138,13 @@ mod tests {
         ));
     }
 
+    //DONE
     #[test]
     fn trailing_comma() {
         assert_eq!("John,32,".parse::<Person>(), Err(ParsePersonError::BadLen));
     }
 
+    //DONE
     #[test]
     fn trailing_comma_and_some_string() {
         assert_eq!(
